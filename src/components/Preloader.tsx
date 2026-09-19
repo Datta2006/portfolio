@@ -1,20 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { profile } from "../data";
 
 /* ------------------------------------------------------------
    Preloader: branded intro curtain. Purpose: delight at the
-   rare/first-time tier. Shows once per load, ~1.4s, name mask
-   reveal + counter, then exits upward. Skips entirely under
-   prefers-reduced-motion.
+   rare/first-time tier. Runs once per load (a completed-run ref
+   guards against StrictMode remounts restarting it), ~1.4s total:
+   name mask reveal + counter, then exits upward. Skips entirely
+   under prefers-reduced-motion. Body scroll stays locked until
+   the exit animation completes.
    ------------------------------------------------------------ */
 export function Preloader({ onDone }: { onDone: () => void }) {
   const reduce = useReducedMotion();
   const [count, setCount] = useState(0);
   const [exiting, setExiting] = useState(false);
+  const doneRef = useRef(false);
 
   useEffect(() => {
+    if (doneRef.current) return;
     if (reduce) {
+      doneRef.current = true;
       onDone();
       return;
     }
@@ -33,6 +38,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
         setExiting(true);
         window.setTimeout(() => {
           document.body.style.overflow = "";
+          doneRef.current = true;
           onDone();
         }, 500);
       }
@@ -46,7 +52,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
 
   return (
     <AnimatePresence>
-      {!exiting || count < 100 ? (
+      {!exiting && (
         <motion.div
           className="preloader"
           exit={{ y: "-100%" }}
@@ -78,11 +84,11 @@ export function Preloader({ onDone }: { onDone: () => void }) {
               {profile.role}
             </motion.span>
           </div>
-          <span className="preloader-count">
+          <span className="preloader-count" aria-hidden="true">
             {String(count).padStart(3, "0")}
           </span>
         </motion.div>
-      ) : null}
+      )}
     </AnimatePresence>
   );
 }

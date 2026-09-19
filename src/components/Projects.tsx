@@ -17,13 +17,12 @@ export function Projects() {
       <div className="container">
         <Reveal>
           <p className="mono-label">Selected work</p>
-          <h2 className="display-lg projects-title">Things I have built</h2>
-        </Reveal>
+          <h2 className="display-lg projects-title">Things I have built</h2>        </Reveal>
       </div>
       {reduce ? (
         <div className="container projects-static">
-          {projects.map((p) => (
-            <ProjectCard key={p.title} project={p} index={projects.indexOf(p)} />
+          {projects.map((p, i) => (
+            <ProjectCard key={p.title} project={p} index={i} />
           ))}
         </div>
       ) : (
@@ -66,7 +65,6 @@ function StackCard({
   total: number;
   progress: ReturnType<typeof useScroll>["scrollYProgress"];
 }) {
-  const ref = useRef<HTMLDivElement>(null);
   const isLast = index === total - 1;
 
   // This card shrinks/dims as the next card scrolls in over it.
@@ -74,11 +72,10 @@ function StackCard({
   const opacity = useTransform(progress, [index / total, (index + 1) / total], [1, 0.4]);
 
   return (
-    <div className="stack-card" ref={ref}>
+    <div className="stack-card">
       <motion.div
         className="project-card"
         style={isLast ? undefined : { scale, opacity }}
-        data-accent={index % 2 === 0 ? "emerald" : "sage"}
         data-tint={index}
       >
         <div className="project-card-inner">
@@ -121,11 +118,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               Code <ArrowUpRight size={14} weight="bold" />
             </a>
           </div>
-          </div>
+        </div>
         <h3 className="project-title display-md">{project.title}</h3>
         <p className="project-desc">{project.description}</p>
         <div className="project-tags">
-          {projects && project.tags.map((t) => <span key={t} className="chip">{t}</span>)}
+          {project.tags.map((t) => (
+            <span key={t} className="chip">{t}</span>
+          ))}
         </div>
       </div>
     </div>

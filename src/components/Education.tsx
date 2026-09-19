@@ -4,7 +4,7 @@ import { education } from "../data";
 /* Education: compact two-entry strip, no card grid. */
 export function Education() {
   return (
-    <section className="section education" id="education">
+    <section className="section section-line education" id="education">
       <div className="container">
         <Reveal>
           <h2 className="display-lg">Education</h2>

@@ -33,6 +33,6 @@ export function TechMarquee() {
   );
 }
 
-const A = ["React", "TypeScript", "Node.js", "Redis", "MySQL", "Socket.IO"];
-const B = ["Docker", "Python", "Express", "RAG", "Gemini", "GPT"];
+const A = ["C++", "Python", "TypeScript", "Node.js", "Express.js", "MySQL"];
+const B = ["Docker", "Linux", "RAG", "Gemini", "GPT", "Git"];
 const ALL_ITEMS = [...A, ...B];

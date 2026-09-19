@@ -19,10 +19,10 @@
   --bg-card: #121417;
   --bg-card-hover: #17191d;
 
-  /* text */
+  /* text (--text-low now passes 4.5:1 on --bg for mono labels) */
   --text-hi: #f2f4f6;
   --text-mid: #9aa1ab;
-  --text-low: #5c6470;
+  --text-low: #737c88;
 
   /* single accent, locked page-wide */
   --accent: #34d399;
@@ -93,6 +93,11 @@ body {
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.08;
+  text-wrap: balance;
+}
+
+.display-xl {
+  text-wrap: balance;
 }
 
 .display-md {
@@ -356,6 +361,13 @@ body {
   height: 2px;
   background: var(--text-hi);
   display: block;
+  transition: transform 0.2s ease;
+}
+.nav-burger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(3.5px) rotate(45deg);
+}
+.nav-burger[aria-expanded="true"] span:nth-child(2) {
+  transform: translateY(-3.5px) rotate(-45deg);
 }
 .mobile-menu {
   position: fixed;
@@ -676,7 +688,8 @@ body {
 }
 
 /* ============ Skills bento ============ */
-.skills .display-lg {
+.skills-title {
+  margin-top: 0.6rem;
   margin-bottom: 3rem;
 }
 .bento {
@@ -776,6 +789,9 @@ body {
 .edu-divider {
   height: 1px;
   background: var(--line);
+}
+.edu-list > :last-child .edu-divider {
+  display: none;
 }
 
 /* ============ Contact / footer ============ */

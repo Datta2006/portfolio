@@ -1,28 +1,34 @@
 // Central content source for the portfolio.
-// Links marked PLACEHOLDER need real URLs.
 
 export const profile = {
   name: "Datta L",
   firstName: "Datta",
   lastName: "L",
-  role: "Full Stack Developer",
+  role: "Software Engineer",
   tagline:
-    "I build distributed systems, real-time apps, and LLM-powered tooling that hold up under real traffic.",
+    "I build scalable software systems and AI-powered applications with a focus on backend engineering, distributed systems, and LLMs.",
   email: "ldatta01.dl@gmail.com",
   phone: "+91 8431468861",
   location: "Bengaluru, India",
   availability: "Open to opportunities",
 };
 
-// PLACEHOLDER urls - replace with real profiles
 export const socials = [
-  { label: "GitHub", href: "https://github.com/dattal", icon: "github" },
+  {
+    label: "GitHub",
+    href: "https://github.com/Datta2006",
+    icon: "github",
+  },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/datta-l",
     icon: "linkedin",
   },
-  { label: "Email", href: "mailto:ldatta01.dl@gmail.com", icon: "mail" },
+  {
+    label: "Email",
+    href: "mailto:ldatta01.dl@gmail.com",
+    icon: "mail",
+  },
 ] as const;
 
 export type Project = {
@@ -33,30 +39,29 @@ export type Project = {
   demo: string | null;
 };
 
-// PLACEHOLDER repo/demo urls
 export const projects: Project[] = [
   {
     title: "Distributed URL Shortener",
     description:
-      "Block-based ID allocation keeps URL creation to a single database round-trip. Redis cache-aside reads, SHA-256 deduplication, and token-bucket rate limiting round out the service.",
+      "A scalable URL shortening service with Redis caching, MySQL persistence, SHA-256 based deduplication, and token-bucket rate limiting.",
     tags: ["Node.js", "Redis", "MySQL", "Docker"],
-    repo: "https://github.com/dattal/url-shortener",
+    repo: "https://github.com/Datta2006/URL-shortner",
     demo: null,
   },
   {
     title: "Collaborative Document Editor",
     description:
-      "Real-time multi-user editing over Socket.IO with live cursors, document permissions, and version history, backed by a REST API and JWT access control.",
+      "A real-time collaborative editor with multi-user editing, live cursors, document permissions, version history, REST APIs, and JWT-based authentication.",
     tags: ["JavaScript", "Express.js", "Socket.IO", "MySQL"],
-    repo: "https://github.com/dattal/collab-editor",
+    repo: "https://github.com/Datta2006/Collaborative-Document-Editor",
     demo: null,
   },
   {
     title: "Metro Ticket Booking System",
     description:
-      "End-to-end booking flow with JWT auth, live train search, PDF ticket generation, and MetaMask payment, plus an admin dashboard for the full operations surface.",
+      "A full-stack metro booking platform with JWT authentication, train search, PDF ticket generation, MetaMask payments, and an admin operations dashboard.",
     tags: ["React", "Express.js", "MySQL", "MetaMask"],
-    repo: "https://github.com/dattal/metro-booking",
+    repo: "https://github.com/Datta2006/Metro-management",
     demo: null,
   },
 ];
@@ -66,55 +71,109 @@ export const experience = {
   title: "Software Development Engineer Intern",
   period: "May 2026 - Jul 2026",
   bullets: [
-    "Built a configurable ETL platform that unifies structured and unstructured data from e-commerce and social platforms into one knowledge base.",
-    "Designed a multithreaded scraping framework with parallel domain execution and pluggable pipelines; new sources plug in without core changes.",
+    "Built a configurable ETL platform that unified structured and unstructured data from e-commerce and social platforms into a centralized knowledge base.",
+    "Designed a multithreaded scraping framework with parallel domain execution and pluggable pipelines, allowing new data sources to be added without modifying the core system.",
     "Implemented a MySQL-backed distributed task queue for fault-tolerant batch transformation across worker servers.",
-    "Shipped a RAG-based QA system pairing vector search with LLMs to ground seller insights in aggregated trend data.",
+    "Built a RAG-based QA system combining vector search and LLMs to ground seller insights in aggregated trend data.",
   ],
 };
 
 export type SkillGroup = {
   label: string;
-  icon: "atom" | "plugs" | "database" | "cube" | "robot" | "crosshair";
+  icon:
+  | "atom"
+  | "plugs"
+  | "database"
+  | "cube"
+  | "robot"
+  | "crosshair"
+  | "code"
+  | "cpu";
   items: string[];
   span: 1 | 2;
 };
 
 export const skills: SkillGroup[] = [
   {
-    label: "Frontend",
+    label: "Agentic AI",
     icon: "atom",
-    items: ["React.js", "TypeScript", "JavaScript", "HTML", "CSS"],
+    items: [
+      "AI Agents",
+      "RAG",
+      "LLM Integration",
+      "Prompt Engineering",
+    ],
     span: 2,
   },
+
+  {
+    label: "Programming",
+    icon: "code",
+    items: [
+      "C++",
+      "C",
+      "Python",
+      "JavaScript",
+      "TypeScript",
+    ],
+    span: 1,
+  },
+
   {
     label: "Backend",
     icon: "plugs",
-    items: ["Node.js", "Express.js", "Python", "REST APIs"],
+    items: [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+    ],
     span: 1,
   },
+
   {
     label: "Databases",
     icon: "database",
-    items: ["MySQL", "Redis", "Schema design"],
+    items: [
+      "MySQL",
+      "SQL",
+      "Database Design",
+    ],
     span: 1,
   },
+
   {
     label: "AI & LLM",
     icon: "robot",
-    items: ["RAG", "Gemini", "GPT integration"],
+    items: [
+      "Gemini",
+      "GPT",
+      "RAG",
+      "LLM Applications",
+    ],
     span: 1,
   },
+
   {
-    label: "Web Scraping",
-    icon: "crosshair",
-    items: ["Structured and unstructured extraction"],
+    label: "Core CS",
+    icon: "cpu",
+    items: [
+      "Data Structures & Algorithms",
+      "OOP",
+      "DBMS",
+      "Operating Systems",
+    ],
     span: 1,
   },
+
   {
-    label: "DevOps",
+    label: "Tools & DevOps",
     icon: "cube",
-    items: ["Docker", "Docker Compose", "Git/GitHub"],
+    items: [
+      "Git",
+      "GitHub",
+      "Docker",
+      "Linux",
+    ],
     span: 2,
   },
 ];
@@ -124,30 +183,12 @@ export const education = [
     school: "National Institute of Technology Karnataka",
     degree: "B.Tech, Computer Science and Engineering",
     metric: "CGPA 7.7 / 10",
-    period: "2022 - 2026", // ASSUMED: verify years
+    period: "2023 - 2027",
   },
   {
     school: "Rashtrotthana Vidya Kendra (TAPAS)",
     degree: "Higher Secondary, PCMCs",
     metric: "90%",
-    period: "2020 - 2022", // ASSUMED: verify years
+    period: "2021 - 2023",
   },
-];
-
-export const marqueeRowA = [
-  "React",
-  "TypeScript",
-  "Node.js",
-  "Redis",
-  "MySQL",
-  "Socket.IO",
-];
-
-export const marqueeRowB = [
-  "Docker",
-  "Python",
-  "Express",
-  "RAG",
-  "Gemini",
-  "GPT",
 ];

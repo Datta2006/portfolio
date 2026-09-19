@@ -11,7 +11,7 @@ const SOCIAL_ICONS = {
 
 export function Hero({ ready }: { ready: boolean }) {
   const reduce = useReducedMotion();
-  const role = useScramble("Full Stack Developer", ready);
+  const role = useScramble(profile.role, ready);
 
   return (
     <section className="hero" id="top">
@@ -29,9 +29,9 @@ export function Hero({ ready }: { ready: boolean }) {
         </motion.p>
 
         <h1 className="hero-title display-xl">
-          <MaskedLine delay={ready ? 0.2 : 0}>{profile.name}</MaskedLine>
+          <MaskedLine active={ready} delay={0.2}>{profile.name}</MaskedLine>
           <span className="hero-title-accent">
-            <MaskedLine delay={ready ? 0.32 : 0}>
+            <MaskedLine active={ready} delay={0.32}>
               {role || "\u00A0"}
               {ready && !reduce && (
                 <motion.span

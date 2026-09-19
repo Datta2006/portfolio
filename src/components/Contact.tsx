@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Copy, Check } from "@phosphor-icons/react";
-import { Magnetic, Reveal, useCopy, CopyFeedback } from "./motion-primitives";
+import { Magnetic, Reveal, useCopy } from "./motion-primitives";
 import { profile, socials } from "../data";
 
 /* ------------------------------------------------------------
@@ -21,7 +21,7 @@ export function Contact() {
   const { copied, copy } = useCopy();
 
   return (
-    <section className="section contact" id="contact" ref={ref}>
+    <section className="section section-line contact" id="contact" ref={ref}>
       <div className="glow contact-glow" aria-hidden="true" />
       <motion.div
         className="container contact-inner"
@@ -62,7 +62,6 @@ export function Contact() {
           <div className="contact-meta">
             <span className="mono-label">{profile.phone}</span>
             <span className="mono-label">{profile.location}</span>
-            <CopyFeedback show={copied} />
           </div>
         </Reveal>
       </motion.div>

@@ -6,6 +6,8 @@ import {
   Cube,
   Robot,
   Crosshair,
+  Code,
+  Cpu,
   type Icon,
 } from "@phosphor-icons/react";
 import { Reveal } from "./motion-primitives";
@@ -18,6 +20,8 @@ const ICONS: Record<SkillGroup["icon"], Icon> = {
   cube: Cube,
   robot: Robot,
   crosshair: Crosshair,
+  code: Code,
+  cpu: Cpu,
 };
 
 /* ------------------------------------------------------------
@@ -27,10 +31,11 @@ const ICONS: Record<SkillGroup["icon"], Icon> = {
    ------------------------------------------------------------ */
 export function Skills() {
   return (
-    <section className="section skills" id="skills">
+    <section className="section section-line skills" id="skills">
       <div className="container">
         <Reveal>
-          <h2 className="display-lg">What I work with</h2>
+          <p className="mono-label">Stack</p>
+          <h2 className="display-lg skills-title">What I work with</h2>
         </Reveal>
 
         <div className="bento">

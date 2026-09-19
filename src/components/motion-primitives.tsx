@@ -10,7 +10,6 @@ import {
   useMotionValue,
   useSpring,
   useReducedMotion,
-  AnimatePresence,
 } from "framer-motion";
 
 /* ------------------------------------------------------------
@@ -88,15 +87,18 @@ export function Reveal({
   );
 }
 
-/* Masked line reveal for display type: text rises from behind a clip. */
+/* Masked line reveal for display type: text rises from behind a clip.
+   `active=false` holds the line hidden (used to sync with the preloader). */
 export function MaskedLine({
   children,
   delay = 0,
   className,
+  active = true,
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
+  active?: boolean;
 }) {
   const reduce = useReducedMotion();
   return (
@@ -112,7 +114,7 @@ export function MaskedLine({
       <motion.span
         style={{ display: "block" }}
         initial={reduce ? false : { y: "110%" }}
-        animate={{ y: "0%" }}
+        animate={reduce ? undefined : { y: active ? "0%" : "110%" }}
         transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
       >
         {children}
@@ -183,22 +185,3 @@ export function useCopy(timeout = 1600) {
   return { copied, copy };
 }
 
-/* Small animated confirmation dot for copy feedback. */
-export function CopyFeedback({ show }: { show: boolean }) {
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.span
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 6 }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
-          className="mono-label"
-          style={{ color: "var(--accent)" }}
-        >
-          Copied
-        </motion.span>
-      )}
-    </AnimatePresence>
-  );
-}

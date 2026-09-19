@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
 import { Reveal } from "./motion-primitives";
 import { experience } from "../data";
 
@@ -9,6 +9,7 @@ import { experience } from "../data";
    scroll progress, spring-smoothed, no listeners.
    ------------------------------------------------------------ */
 export function Experience() {
+  const reduce = useReducedMotion();
   const lineRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: lineRef,
@@ -17,7 +18,7 @@ export function Experience() {
   const scaleY = useSpring(scrollYProgress, { stiffness: 90, damping: 25 });
 
   return (
-    <section className="section experience" id="experience">
+    <section className="section section-line experience" id="experience">
       <div className="container">
         <Reveal>
           <p className="mono-label">Experience</p>
@@ -26,7 +27,10 @@ export function Experience() {
 
         <div className="timeline" ref={lineRef}>
           <div className="timeline-track">
-            <motion.div className="timeline-fill" style={{ scaleY, transformOrigin: "top" }} />
+            <motion.div
+              className="timeline-fill"
+              style={reduce ? undefined : { scaleY, transformOrigin: "top" }}
+            />
           </div>
 
           <div className="timeline-item">
@@ -37,9 +41,15 @@ export function Experience() {
                 <p className="timeline-company">{experience.company}</p>
                 <ul className="timeline-bullets">
                   {experience.bullets.map((b, i) => (
-                    <Reveal key={b} delay={0.08 * i}>
-                      <li>{b}</li>
-                    </Reveal>
+                    <motion.li
+                      key={b}
+                      initial={reduce ? false : { opacity: 0, y: 14 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.5 }}
+                      transition={{ duration: 0.5, delay: 0.08 * i, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      {b}
+                    </motion.li>
                   ))}
                 </ul>
               </div>

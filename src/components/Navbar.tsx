@@ -48,7 +48,11 @@ export function Navbar({ ready }: { ready: boolean }) {
       if (e.key === "Escape") setMenuOpen(false);
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   return (
@@ -87,6 +91,7 @@ export function Navbar({ ready }: { ready: boolean }) {
             className="nav-burger"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
+            aria-haspopup="dialog"
             onClick={() => setMenuOpen((v) => !v)}
           >
             <span />
@@ -99,6 +104,9 @@ export function Navbar({ ready }: { ready: boolean }) {
         {menuOpen && (
           <motion.div
             className="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site navigation"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
