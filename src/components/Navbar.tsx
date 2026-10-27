@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValueEvent, useScroll, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Magnetic } from "./motion-primitives";
-
 const LINKS = [
   { label: "Work", href: "#projects" },
   { label: "Experience", href: "#experience" },
@@ -79,11 +77,6 @@ export function Navbar({ ready }: { ready: boolean }) {
                 {link.label}
               </a>
             ))}
-            <Magnetic strength={0.25}>
-              <a href="#contact" className="nav-cta">
-                Say hello
-              </a>
-            </Magnetic>
           </nav>
 
           <button
@@ -125,16 +118,6 @@ export function Navbar({ ready }: { ready: boolean }) {
                 {link.label}
               </motion.a>
             ))}
-            <motion.a
-              href={`mailto:ldatta01.dl@gmail.com`}
-              className="mobile-link mobile-link-accent"
-              onClick={() => setMenuOpen(false)}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08 + LINKS.length * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Say hello
-            </motion.a>
           </motion.div>
         )}
       </AnimatePresence>

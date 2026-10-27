@@ -59,6 +59,93 @@ export function Magnetic({
 }
 
 /* ------------------------------------------------------------
+   CursorGlow: the hero background itself shifts warmth with the
+   pointer. Purpose: delight (marketing tier). One oversized,
+   pre-rasterised gradient moved with transform only - no canvas,
+   no per-frame paint, no React re-renders. Oversized and soft so
+   it reads as ambient light, not a blob stuck to the cursor.
+   Desktop hover pointers only; absent under reduced motion.
+   ------------------------------------------------------------ */
+export function CursorGlow() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const blob = el.firstElementChild as HTMLElement | null;
+    if (!blob) return;
+
+    let rect = el.getBoundingClientRect();
+    let targetX = rect.width / 2;
+    let targetY = rect.height * 0.4;
+    let x = targetX;
+    let y = targetY;
+    let tracked = false;
+    let visible = false;
+    let raf = 0;
+
+    const measure = () => {
+      rect = el.getBoundingClientRect();
+    };
+
+    const render = () => {
+      const dx = targetX - x;
+      const dy = targetY - y;
+      x += dx * 0.07;
+      y += dy * 0.07;
+      blob.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(3.4)`;
+
+      raf = Math.abs(dx) > 0.15 || Math.abs(dy) > 0.15 ? requestAnimationFrame(render) : 0;
+    };
+
+    const onMove = (event: PointerEvent) => {
+      const inside =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+
+      if (inside !== visible) {
+        visible = inside;
+        el.classList.toggle("is-visible", visible);
+      }
+      if (!inside) return;
+
+      targetX = event.clientX - rect.left;
+      targetY = event.clientY - rect.top;
+
+      if (!tracked) {
+        tracked = true;
+        x = targetX;
+        y = targetY;
+      }
+
+      if (!raf) raf = requestAnimationFrame(render);
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
+
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="cursor-glow" aria-hidden="true">
+      <span className="cursor-glow-blob" />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------
    Reveal: enter-on-scroll fade + rise. Purpose: storytelling
    (content arrives as you reach it). once-only, no scroll listeners.
    ------------------------------------------------------------ */

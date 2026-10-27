@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, GithubLogo, LinkedinLogo, EnvelopeSimple } from "@phosphor-icons/react";
-import { Magnetic, MaskedLine, useScramble } from "./motion-primitives";
+import { CursorGlow, Magnetic, MaskedLine, useScramble } from "./motion-primitives";
 import { profile, socials } from "../data";
 
 const SOCIAL_ICONS = {
@@ -15,8 +15,8 @@ export function Hero({ ready }: { ready: boolean }) {
 
   return (
     <section className="hero" id="top">
+      <CursorGlow />
       <div className="hero-grid-bg" aria-hidden="true" />
-      <div className="glow hero-glow" aria-hidden="true" />
 
       <div className="container hero-inner">
         <motion.p

@@ -333,20 +333,6 @@ body {
 .nav-link.is-active {
   color: var(--accent);
 }
-.nav-cta {
-  display: inline-block;
-  background: var(--text-hi);
-  color: #0c0d0f;
-  text-decoration: none;
-  font-size: 0.88rem;
-  font-weight: 600;
-  border-radius: var(--r-pill);
-  padding: 0.5rem 1.1rem;
-  transition: transform 0.15s ease;
-}
-.nav-cta:active {
-  transform: scale(0.97);
-}
 .nav-burger {
   display: none;
   flex-direction: column;
@@ -387,10 +373,6 @@ body {
   font-weight: 600;
   letter-spacing: -0.02em;
 }
-.mobile-link-accent {
-  color: var(--accent);
-}
-
 /* ============ Hero ============ */
 .hero {
   position: relative;
@@ -404,10 +386,34 @@ body {
   position: relative;
   padding-block: 3rem;
 }
-.hero-glow {
-  top: -20vmax;
-  left: 50%;
-  transform: translateX(-50%);
+/* cursor-tracked ambient wash: one oversized pre-rasterised gradient
+   moved on the compositor. transform/opacity only, no filters/canvas.
+   scale(3) keeps the texture small while softening it into the page. */
+.cursor-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-out);
+}
+.cursor-glow.is-visible {
+  opacity: 1;
+}
+.cursor-glow-blob {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: min(40vmax, 480px);
+  aspect-ratio: 1;
+  transform: translate3d(-50%, -50%, 0) scale(3.4);
+  background: radial-gradient(
+    circle,
+    #34d3991a 0%,
+    #34d39912 22%,
+    #2dd4bf0a 45%,
+    transparent 70%
+  );
+  will-change: transform;
 }
 .hero-eyebrow {
   margin-bottom: 1.5rem;
