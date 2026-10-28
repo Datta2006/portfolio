@@ -1,38 +1,43 @@
 import { useReducedMotion } from "framer-motion";
 
-/* One marquee for the whole page. Two rows, opposite directions,
-   pause on hover. Purpose: breadth signal without a spec sheet.
-   Pure CSS animation, static under reduced motion. */
+/* A single sparse technical ticker. Pauses on hover and wraps into
+   a static index under reduced motion. The skill section carries
+   the accessible list, so the moving duplicate is hidden from AT. */
+const ITEMS = [
+  "C++",
+  "PYTHON",
+  "TYPESCRIPT",
+  "NODE.JS",
+  "EXPRESS",
+  "MYSQL",
+  "REDIS",
+  "DOCKER",
+  "LINUX",
+  "RAG",
+  "GEMINI",
+  "GPT",
+  "GIT",
+];
+
 export function TechMarquee() {
   const reduce = useReducedMotion();
-  if (reduce) {
-    return (
-      <div className="marquee marquee-static">
-        <div className="marquee-row">
-          {ALL_ITEMS.map((item) => (
-            <span key={item} className="marquee-item">{item}</span>
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="marquee" aria-hidden="true">
-      {[A, B].map((items, row) => (
-        <div className={`marquee-row marquee-row-${row}`} key={row}>
-          {[...items, ...items, ...items].map((item, i) => (
-            <span key={`${item}-${i}`} className="marquee-item">
+    <div className="marquee">
+      <span className="marquee-label mono">STACK / INDEX</span>
+      <div className={`marquee-window ${reduce ? "is-static" : ""}`.trim()}>
+        <div className="marquee-track" aria-hidden={reduce ? undefined : true}>
+          {[...ITEMS, ...ITEMS, ...ITEMS].map((item, index) => (
+            <span className="marquee-item" key={`${item}-${index}`}>
+              <span className="marquee-bullet" aria-hidden="true" />
               {item}
-              <span className="marquee-dot" />
             </span>
           ))}
         </div>
-      ))}
+      </div>
+      <span className="marquee-tail mono" aria-hidden="true">
+        EXEC / 2026
+      </span>
     </div>
   );
 }
-
-const A = ["C++", "Python", "TypeScript", "Node.js", "Express.js", "MySQL"];
-const B = ["Docker", "Linux", "RAG", "Gemini", "GPT", "Git"];
-const ALL_ITEMS = [...A, ...B];

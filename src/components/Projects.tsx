@@ -1,132 +1,92 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { Reveal } from "./motion-primitives";
-import { projects, type Project } from "../data";
+import { SectionHeader } from "./SectionHeader";
+import { projects } from "../data";
 
 /* ------------------------------------------------------------
-   Projects: sticky stacking cards. Purpose: storytelling - each
-   project arrives, pins, and the next slides over it. Scroll-driven
-   via useScroll + transforms (no scroll listeners). Under reduced
-   motion: plain stacked cards, no pinning.
+   Projects: an editorial project index instead of a horizontal
+   turntable. Wide asymmetric rows, oversized outlined numerals,
+   compact technical metadata and a sticky index rail. The first
+   entry is featured at a larger scale. Every entry and source
+   link stays visible and keyboard accessible without motion.
    ------------------------------------------------------------ */
 export function Projects() {
-  const reduce = useReducedMotion();
   return (
     <section className="section projects" id="projects">
-      <div className="container">
-        <Reveal>
-          <p className="mono-label">Selected work</p>
-          <h2 className="display-lg projects-title">Things I have built</h2>        </Reveal>
-      </div>
-      {reduce ? (
-        <div className="container projects-static">
-          {projects.map((p, i) => (
-            <ProjectCard key={p.title} project={p} index={i} />
-          ))}
-        </div>
-      ) : (
-        <StickyStack />
-      )}
-    </section>
-  );
-}
+      <div className="shell">
+        <SectionHeader
+          index="01"
+          label="SELECTED WORK"
+          meta="03 PROJECTS / SOURCE ON GITHUB"
+        >
+          SELECTED
+          <br />
+          <span className="outline">WORK</span>
+        </SectionHeader>
 
-function StickyStack() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  return (
-    <div className="projects-stack" ref={containerRef}>
-      {projects.map((project, i) => (
-        <StackCard
-          key={project.title}
-          project={project}
-          index={i}
-          total={projects.length}
-          progress={scrollYProgress}
-        />
-      ))}
-    </div>
-  );
-}
-
-function StackCard({
-  project,
-  index,
-  total,
-  progress,
-}: {
-  project: Project;
-  index: number;
-  total: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
-}) {
-  const isLast = index === total - 1;
-
-  // This card shrinks/dims as the next card scrolls in over it.
-  const scale = useTransform(progress, [index / total, (index + 1) / total], [1, 0.92]);
-  const opacity = useTransform(progress, [index / total, (index + 1) / total], [1, 0.4]);
-
-  return (
-    <div className="stack-card">
-      <motion.div
-        className="project-card"
-        style={isLast ? undefined : { scale, opacity }}
-        data-tint={index}
-      >
-        <div className="project-card-inner">
-          <div className="project-head">
-            <span className="project-index mono-label">
-              {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        <div className="projects-layout">
+          <aside className="projects-rail">
+            <span className="mono rail-label">INDEX</span>
+            <span className="rail-count">03</span>
+            <span className="mono rail-label">ENTRIES</span>
+            <span className="rail-line" aria-hidden="true" />
+            <span className="mono rail-note">SCROLL ↓</span>
+            <span className="rail-orbit" aria-hidden="true">
+              <span />
             </span>
-            <div className="project-links">
-              <a href={project.repo} target="_blank" rel="noreferrer" className="project-link">
-                Code <ArrowUpRight size={14} weight="bold" />
-              </a>
-              {project.demo && (
-                <a href={project.demo} target="_blank" rel="noreferrer" className="project-link">
-                  Demo <ArrowUpRight size={14} weight="bold" />
-                </a>
-              )}
-            </div>
-          </div>
-          <h3 className="project-title display-md">{project.title}</h3>
-          <p className="project-desc">{project.description}</p>
-          <div className="project-tags">
-            {project.tags.map((t) => (
-              <span key={t} className="chip">{t}</span>
+          </aside>
+
+          <div className="project-index">
+            {projects.map((project, index) => (
+              <Reveal key={project.title} delay={0.04 * index}>
+                <article
+                  className={`project-row ${index === 0 ? "is-featured" : ""}`.trim()}
+                >
+                  <div className="project-index-cell">
+                    <span className="project-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="mono project-index-note">
+                      / {String(projects.length).padStart(2, "0")}
+                    </span>
+                  </div>
+
+                  <div className="project-body">
+                    <span className="mono project-kicker">
+                      PROJECT_{String(index + 1).padStart(3, "0")} — {project.tags.length} TECHNOLOGIES
+                    </span>
+                    <h3 className="project-name">{project.title}</h3>
+                    <p className="project-desc">{project.description}</p>
+                  </div>
+
+                  <div className="project-side">
+                    <span className="mono project-side-label">STACK</span>
+                    <ul className="project-tags">
+                      {project.tags.map((tag) => (
+                        <li key={tag} className="tag">
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href={project.repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="project-source"
+                      aria-label={`View source for ${project.title} on GitHub`}
+                    >
+                      VIEW SOURCE
+                      <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
+                    </a>
+                  </div>
+
+                  <span className="project-corner" aria-hidden="true" />
+                </article>
+              </Reveal>
             ))}
           </div>
         </div>
-      </motion.div>
-    </div>
-  );
-}
-
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  return (
-    <div className="project-card project-card-static" data-tint={index}>
-      <div className="project-card-inner">
-        <div className="project-head">
-          <span className="project-index mono-label">{String(index + 1).padStart(2, "0")}</span>
-          <div className="project-links">
-            <a href={project.repo} target="_blank" rel="noreferrer" className="project-link">
-              Code <ArrowUpRight size={14} weight="bold" />
-            </a>
-          </div>
-        </div>
-        <h3 className="project-title display-md">{project.title}</h3>
-        <p className="project-desc">{project.description}</p>
-        <div className="project-tags">
-          {project.tags.map((t) => (
-            <span key={t} className="chip">{t}</span>
-          ))}
-        </div>
       </div>
-    </div>
+    </section>
   );
 }

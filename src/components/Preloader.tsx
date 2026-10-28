@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { profile } from "../data";
 
 /* ------------------------------------------------------------
-   Preloader: branded intro curtain. Purpose: delight at the
-   rare/first-time tier. Runs once per load (a completed-run ref
-   guards against StrictMode remounts restarting it), ~1.4s total:
-   name mask reveal + counter, then exits upward. Skips entirely
-   under prefers-reduced-motion. Body scroll stays locked until
-   the exit animation completes.
+   Preloader: a brief masthead. One identity line, a counter and
+   an accent rule, gone in under a second. It skips entirely for
+   reduced motion and never keeps the page locked after exiting.
    ------------------------------------------------------------ */
 export function Preloader({ onDone }: { onDone: () => void }) {
   const reduce = useReducedMotion();
@@ -23,70 +20,79 @@ export function Preloader({ onDone }: { onDone: () => void }) {
       onDone();
       return;
     }
-    document.body.style.overflow = "hidden";
 
+    document.body.style.overflow = "hidden";
     const start = performance.now();
-    const DURATION = 900;
+    const DURATION = 700;
     let raf = 0;
+    let lastPaint = 0;
 
     const tick = (now: number) => {
-      const p = Math.min((now - start) / DURATION, 1);
-      setCount(Math.round(p * 100));
-      if (p < 1) {
+      const progress = Math.min((now - start) / DURATION, 1);
+      if (now - lastPaint > 45) {
+        setCount(Math.round(progress * 100));
+        lastPaint = now;
+      }
+      if (progress < 1) {
         raf = requestAnimationFrame(tick);
       } else {
+        doneRef.current = true;
         setExiting(true);
-        window.setTimeout(() => {
-          document.body.style.overflow = "";
-          doneRef.current = true;
-          onDone();
-        }, 500);
       }
     };
     raf = requestAnimationFrame(tick);
+
     return () => {
       cancelAnimationFrame(raf);
       document.body.style.overflow = "";
     };
   }, [reduce, onDone]);
 
+  if (reduce) return null;
+
   return (
-    <AnimatePresence>
+    <AnimatePresence
+      onExitComplete={() => {
+        document.body.style.overflow = "";
+        onDone();
+      }}
+    >
       {!exiting && (
         <motion.div
           className="preloader"
+          aria-hidden="true"
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.55, ease: [0.77, 0, 0.175, 1] }}
+          transition={{ duration: 0.45, ease: [0.77, 0, 0.175, 1] }}
         >
-          <div className="preloader-inner">
-            <span
-              style={{
-                display: "block",
-                overflow: "hidden",
-                paddingBottom: "0.1em",
-              }}
-            >
-              <motion.span
-                className="preloader-name"
-                initial={{ y: "110%" }}
-                animate={{ y: "0%" }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {profile.name}
-              </motion.span>
-            </span>
-            <motion.span
-              className="preloader-role mono-label"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.4 }}
-            >
-              {profile.role}
-            </motion.span>
+          <div className="shell preloader-shell">
+            <div className="preloader-top mono">
+              <span>VOID / 01</span>
+              <span>AN ENGINEER&apos;S UNIVERSE</span>
+            </div>
+
+            <div className="preloader-mid">
+              <span className="preloader-name">VOID</span>
+              <span className="preloader-sat" />
+              <span className="preloader-sub mono">
+                {profile.name} — {profile.role}
+              </span>
+            </div>
+
+            <div className="preloader-bottom">
+              <span className="mono">INITIALIZING SIGNAL</span>
+              <span className="preloader-bar-track">
+                <motion.span
+                  className="preloader-bar"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: count / 100 }}
+                  transition={{ ease: "linear", duration: 0.08 }}
+                />
+              </span>
+              <span className="mono preloader-count">
+                {String(count).padStart(3, "0")}
+              </span>
+            </div>
           </div>
-          <span className="preloader-count" aria-hidden="true">
-            {String(count).padStart(3, "0")}
-          </span>
         </motion.div>
       )}
     </AnimatePresence>
