@@ -133,6 +133,7 @@ function TurntableCard({
     <motion.article
       className="project-card project-card-gallery"
       data-tint={index}
+      data-index={String(index + 1).padStart(2, "0")}
       style={{ rotateY, scale, opacity }}
     >
       <div className="project-card-inner">
@@ -165,7 +166,11 @@ function TurntableCard({
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
-    <div className="project-card project-card-static" data-tint={index}>
+    <div
+      className="project-card project-card-static"
+      data-tint={index}
+      data-index={String(index + 1).padStart(2, "0")}
+    >
       <div className="project-card-inner">
         <div className="project-head">
           <span className="project-index mono-label">{String(index + 1).padStart(2, "0")}</span>
