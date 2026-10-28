@@ -9,6 +9,7 @@ import { Skills } from "./components/Skills";
 import { Education } from "./components/Education";
 import { Contact, Footer } from "./components/Contact";
 import { Cosmos } from "./components/Cosmos";
+import { AmbientCosmos } from "./components/ambient/AmbientCosmos";
 import { CursorOrb } from "./components/CursorOrb";
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         SKIP TO CONTENT
       </a>
       <Cosmos />
+      <AmbientCosmos />
       <div className="structural-grid" aria-hidden="true" />
       <CursorOrb />
       <Preloader onDone={() => setLoaded(true)} />

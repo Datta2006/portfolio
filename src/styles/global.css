@@ -229,6 +229,351 @@ body {
   border-radius: 50%;
 }
 
+/* ---------- Ambient cosmic events ---------- */
+.ambient-cosmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout paint style;
+}
+
+.ambient-dust-field {
+  position: absolute;
+  inset: 0;
+}
+
+.ambient-dust {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: rgba(240, 240, 234, 0.55);
+  opacity: var(--o);
+  box-shadow: 0 0 2px rgba(240, 240, 234, 0.18);
+  animation: ambientDust var(--dur) ease-in-out var(--delay) infinite alternate;
+}
+
+.ambient-dust.is-accent {
+  background: rgba(197, 255, 69, 0.6);
+  box-shadow: 0 0 3px rgba(197, 255, 69, 0.32);
+}
+
+@keyframes ambientDust {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: calc(var(--o) * 0.5);
+  }
+
+  55% {
+    opacity: var(--o);
+  }
+
+  100% {
+    transform: translate3d(var(--dx), var(--dy), 0);
+    opacity: calc(var(--o) * 0.7);
+  }
+}
+
+.ambient-event {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.ambient-shoot {
+  left: var(--x);
+  top: var(--y);
+  width: var(--len);
+  height: var(--th);
+  opacity: 0;
+  transform-origin: 0 50%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--tone-rgb), 0.03) 28%,
+    rgba(var(--tone-rgb), 0.4) 78%,
+    rgba(var(--tone-rgb), 0.95) 100%
+  );
+  animation: ambientShoot var(--dur) cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.ambient-shoot::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: rgb(var(--tone-rgb));
+  box-shadow: 0 0 6px rgba(var(--tone-rgb), 0.5);
+}
+
+@keyframes ambientShoot {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translate3d(0, 0, 0);
+  }
+
+  10% {
+    opacity: var(--o);
+  }
+
+  72% {
+    opacity: var(--o);
+  }
+
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translate3d(var(--dist), 0, 0);
+  }
+}
+
+.ambient-wanderer {
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  opacity: 0;
+  animation: ambientWander var(--dur) ease-in-out forwards;
+}
+
+.ambient-wanderer-body {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation-name: ambientSpin;
+  animation-duration: var(--spin);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: var(--spin-dir, normal);
+}
+
+@keyframes ambientWander {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.86);
+  }
+
+  12% {
+    opacity: var(--o);
+  }
+
+  80% {
+    opacity: var(--o);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dx), var(--dy), 0) scale(1.04);
+  }
+}
+
+@keyframes ambientSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.shape-asteroid {
+  clip-path: polygon(12% 20%, 46% 2%, 88% 16%, 100% 54%, 76% 94%, 28% 88%, 2% 54%);
+  background: radial-gradient(circle at 34% 28%, #878f96, #424950 44%, #14171a 84%);
+}
+
+.shape-asteroid::after {
+  content: "";
+  position: absolute;
+  left: 26%;
+  top: 40%;
+  width: 24%;
+  height: 24%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.28);
+  box-shadow: 9px -5px 0 -3px rgba(0, 0, 0, 0.2);
+}
+
+.shape-moon {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 68% 30%, rgba(240, 240, 234, 0.18) 0 5%, transparent 6%),
+    radial-gradient(circle at 36% 62%, rgba(0, 0, 0, 0.3) 0 8%, transparent 9%),
+    radial-gradient(circle at 28% 32%, #c3c9cc, #7b838a 48%, #2c3136 84%);
+  box-shadow: inset -4px -5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.shape-sphere {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 26%,
+    #eef1f2 0 6%,
+    #aab4bc 18%,
+    #59626b 48%,
+    #14171a 84%
+  );
+  box-shadow: inset -5px -7px 12px rgba(0, 0, 0, 0.6);
+}
+
+.shape-shard {
+  clip-path: polygon(50% 0%, 92% 64%, 28% 100%, 4% 34%);
+  background: linear-gradient(145deg, #7d858c, #3b4248 44%, #101315 82%);
+}
+
+.ambient-anomaly {
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  opacity: 0;
+  animation: ambientAnomaly var(--dur) ease-in-out forwards;
+}
+
+@keyframes ambientAnomaly {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.82);
+  }
+
+  18% {
+    opacity: var(--o);
+  }
+
+  74% {
+    opacity: var(--o);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+.anomaly-orb {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.9) 0 8%,
+    rgb(var(--tone-rgb)) 42%,
+    rgba(var(--tone-rgb), 0.18) 72%,
+    transparent 74%
+  );
+  box-shadow:
+    0 0 10px rgba(var(--tone-rgb), 0.26),
+    0 0 26px rgba(var(--tone-rgb), 0.09);
+  animation: anomalyPulse 5s ease-in-out infinite;
+}
+
+.anomaly-orb::after {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  border: 1px solid rgba(var(--tone-rgb), 0.14);
+  border-radius: 50%;
+}
+
+@keyframes anomalyPulse {
+  0%,
+  100% {
+    transform: scale(0.92);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.anomaly-ring {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(var(--tone-rgb), 0.2);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(var(--tone-rgb), 0.05);
+}
+
+.anomaly-ring::before {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border: 1px dashed rgba(var(--tone-rgb), 0.14);
+  border-radius: 50%;
+  animation: anomalyRingSpin 28s linear infinite;
+}
+
+@keyframes anomalyRingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.anomaly-distortion {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    transparent 0 38%,
+    rgba(var(--tone-rgb), 0.05) 46%,
+    rgba(var(--tone-rgb), 0.16) 57%,
+    transparent 68%
+  );
+  animation: anomalyWarp 9s ease-in-out infinite;
+}
+
+@keyframes anomalyWarp {
+  0%,
+  100% {
+    transform: scaleX(0.9) scaleY(1.05) rotate(-4deg);
+  }
+
+  50% {
+    transform: scaleX(1.06) scaleY(0.94) rotate(4deg);
+  }
+}
+
+.anomaly-particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--r);
+  height: var(--r);
+  margin: calc(var(--r) / -2);
+  border-radius: 50%;
+  background: rgb(var(--tone-rgb));
+  opacity: 0;
+  box-shadow: 0 0 4px rgba(var(--tone-rgb), 0.35);
+  animation: ambientParticle 2.6s ease-in-out var(--delay) infinite;
+}
+
+@keyframes ambientParticle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+
+  35% {
+    opacity: 0.8;
+    transform: translate3d(var(--px), var(--py), 0);
+  }
+
+  70% {
+    opacity: 0.24;
+    transform: translate3d(calc(var(--px) * 0.6), calc(var(--py) * 0.6), 0);
+  }
+}
+
 .structural-grid {
   position: fixed;
   inset: 0;
@@ -2675,6 +3020,15 @@ body {
   .scroll-line::after,
   .status-dot {
     animation: none !important;
+  }
+
+  .ambient-dust {
+    animation: none !important;
+    opacity: calc(var(--o) * 0.7);
+  }
+
+  .ambient-event {
+    display: none !important;
   }
 
   .cursor-orb {
