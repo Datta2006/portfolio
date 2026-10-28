@@ -1,5 +1,4 @@
-import { lazy, Suspense, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useState } from "react";
 import { Navbar } from "./components/Navbar";
 import { Preloader } from "./components/Preloader";
 import { Hero } from "./components/Hero";
@@ -9,24 +8,24 @@ import { Experience } from "./components/Experience";
 import { Skills } from "./components/Skills";
 import { Education } from "./components/Education";
 import { Contact, Footer } from "./components/Contact";
-
-const SnakeLayer = lazy(() => import("./components/SnakeLayer"));
+import { Cosmos } from "./components/Cosmos";
+import { CursorOrb } from "./components/CursorOrb";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
-  const reduce = useReducedMotion();
 
   return (
     <>
+      <a className="skip-link" href="#main">
+        SKIP TO CONTENT
+      </a>
+      <Cosmos />
+      <div className="structural-grid" aria-hidden="true" />
+      <CursorOrb />
       <Preloader onDone={() => setLoaded(true)} />
       <Navbar ready={loaded} />
-      <div className="page-fog" aria-hidden="true" />
-      {loaded && !reduce && (
-        <Suspense fallback={null}>
-          <SnakeLayer />
-        </Suspense>
-      )}
-      <main className="app-root">
+
+      <main id="main" className="app-root" tabIndex={-1}>
         <Hero ready={loaded} />
         <TechMarquee />
         <Projects />
@@ -35,8 +34,8 @@ export default function App() {
         <Education />
         <Contact />
       </main>
+
       <Footer />
-      <div className="vignette" aria-hidden="true" />
       <div className="grain" aria-hidden="true" />
     </>
   );

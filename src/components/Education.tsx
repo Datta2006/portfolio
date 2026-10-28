@@ -1,28 +1,41 @@
 import { Reveal } from "./motion-primitives";
+import { SectionHeader } from "./SectionHeader";
 import { education } from "../data";
 
-/* Education: compact two-entry strip, no card grid. */
+/* Education: a compact credentials index. No cards, no shadows:
+   institution and qualification carry the hierarchy, dates and
+   metrics sit in the monospace margin. */
 export function Education() {
   return (
-    <section className="section section-line education" id="education">
-      <div className="container">
-        <Reveal>
-          <h2 className="display-lg">Education</h2>
-        </Reveal>
-        <div className="edu-list">
-          {education.map((e, i) => (
-            <Reveal key={e.school} delay={0.08 * i}>
-              <div className="edu-row">
+    <section className="section education" id="education">
+      <div className="shell">
+        <SectionHeader
+          index="04"
+          label="CREDENTIALS"
+          meta="02 RECORDS / 2021—2027"
+        >
+          EDUCATION
+          <br />
+          <span className="outline">RECORD</span>
+        </SectionHeader>
+
+        <div className="edu-table">
+          {education.map((entry, index) => (
+            <Reveal key={entry.school} delay={0.05 * index}>
+              <article className="edu-row">
+                <span className="mono edu-num">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 <div className="edu-main">
-                  <h3 className="edu-school">{e.school}</h3>
-                  <p className="edu-degree">{e.degree}</p>
+                  <h3 className="edu-school">{entry.school}</h3>
+                  <p className="edu-degree">{entry.degree}</p>
                 </div>
-                <div className="edu-meta">
-                  <span className="edu-metric">{e.metric}</span>
-                  <span className="edu-period mono-label">{e.period}</span>
-                </div>
-              </div>
-              <div className="edu-divider" />
+                <span className="edu-metric mono">{entry.metric}</span>
+                <span className="mono edu-period">{entry.period}</span>
+                <span className="edu-marker" aria-hidden="true">
+                  <span />
+                </span>
+              </article>
             </Reveal>
           ))}
         </div>
